@@ -20,8 +20,8 @@ return new class extends Migration
             $table->index('user_id','cl_user_idx');
             $table->index('comment_id','cl_comment_idx');
 
-            $table->foreign('user_id','cl_user_fk')->on('users')->references('id');
-            $table->foreign('comment_id','cl_comment_fk')->on('comments')->references('id');
+            $table->foreign('user_id','cl_user_fk')->on('users')->references('id')->onDelete('cascade');
+            $table->foreign('comment_id','cl_comment_fk')->on('comments')->references('id')->onDelete('cascade');
         });
     }
 

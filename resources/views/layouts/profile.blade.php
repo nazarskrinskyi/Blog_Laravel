@@ -31,6 +31,10 @@
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
     <!-- summernote -->
     <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.css') }}">
+
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -51,12 +55,7 @@
 
         </ul>
         <ul class="navbar-nav">
-            <li class="nav-item" style="padding-right: 5px">
-                <form action="{{ route('logout') }}" method="post">
-                    @csrf
-                    <input class="btn btn-outline-warning" type="submit" value="Edit">
-                </form>
-            </li>
+
             <li class="nav-item">
                 <form action="{{ route('logout') }}" method="post">
                     @csrf

@@ -29,6 +29,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Profile', 'middleware' => 'au
     Route::get('/{profile}', ShowController::class)->name('profile.show');
 });
 
+//Route::group(['namespace' => 'App\Http\Controllers\Practise', 'prefix' => 'practise' ], function () {
+//    Route::get('/', IndexController::class)->name('practise');
+//    Route::get('/{page}', IndexController::class)->name('practise.index');
+//});
+
 
 Route::group(['namespace' => 'App\Http\Controllers\Post', 'prefix' => 'posts'], function () {
 

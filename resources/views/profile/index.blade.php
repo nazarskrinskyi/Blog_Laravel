@@ -5,7 +5,6 @@
         body {
             color: #1a202c;
             text-align: left;
-            background-color: #e2e8f0;
         }
 
         .main-body {
@@ -60,17 +59,18 @@
             box-shadow: none !important;
         }
     </style>
-    <div class="container">
-        <div class="main-body">
 
+    <div class="container" id="app">
+        <div class="main-body">
             <!-- Breadcrumb -->
             <div style="position: relative">
-                <nav aria-label="breadcrumb" class="main-breadcrumb">
+                <nav aria-label="breadcrumb" class="main-breadcrumb" style="background: whitesmoke;padding: 1px 0 1px 20px;border-radius: 3px">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                        <li class="breadcrumb-item" style="margin-top: 15px;"><a href="{{ route('home') }}" style="text-decoration: none;font-size: large">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" style="margin-top: 15px;text-decoration: none;font-size: large">User Profile</li>
                         <li aria-current="page">
-                            <button onclick="confirmDelete()" class="btn-outline-danger btn-sm" style="position: absolute; right: 10px; bottom: 7px">
+                            <button onclick="confirmDelete()" type="submit" class="btn-outline-danger btn-sm"
+                                    style="position: absolute; right: 10px; bottom: 15px">
                                 Delete Account
                             </button>
 
@@ -95,11 +95,11 @@
                                 <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
                                      class="rounded-circle" width="150">
                                 <div class="mt-3">
-                                    <h4>{{ !is_null($profile->full_name) ? $profile->full_name : '' }}</h4>
+                                    <!-- Check if $profile is not null before accessing its properties -->
+                                    <h4>{{ $profile !== null ? $profile->full_name : '' }}</h4>
+
                                     <p class="text-secondary mb-1">Full Stack Developer</p>
                                     <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                                    <button class="btn btn-primary">Follow</button>
-                                    <button class="btn btn-outline-primary">Message</button>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +116,7 @@
                                     </svg>
                                     Telegram
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->telegram) ? $profile->telegram : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->telegram ?? 'NaN' }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -129,7 +129,8 @@
                                     </svg>
                                     Twitter
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->twitter) ? $profile->twitter : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->twitter ?? 'NaN' }}</span>
+
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -143,7 +144,8 @@
                                     </svg>
                                     Instagram
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->instagram) ? $profile->instagram : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->instagram ?? 'NaN' }}</span>
+
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -156,7 +158,7 @@
                                     </svg>
                                     Facebook
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->facebook) ? $profile->facebook : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->facebook ?? 'NaN' }}</span>
                             </li>
 
                         </ul>
@@ -170,7 +172,7 @@
                                     <h6 class="mb-0">Full Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ !is_null($profile->full_name) ? $profile->full_name : '' }}
+                                    <span class="text-secondary">{{ $profile->full_name ?? 'NaN' }}</span>
                                 </div>
                             </div>
                             <hr>
@@ -188,7 +190,8 @@
                                     <h6 class="mb-0">Phone</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ !is_null($profile->phone_number) ? $profile->phone_number : '' }}
+                                    <span class="text-secondary">{{ $profile->phone_number ?? 'NaN' }}</span>
+
                                 </div>
                             </div>
                             <hr>
@@ -197,7 +200,7 @@
                                     <h6 class="mb-0">Address</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ !is_null($profile->address) ? $profile->address : '' }}
+                                    <span class="text-secondary">{{ $profile->address ?? 'NaN' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +210,8 @@
                         <div class="col-sm-6 mb-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Followers</i></h6>
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Followers</i>
+                                    </h6>
                                     <small>Email</small>
                                     <div class="progress mb-3" style="height: 5px">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
@@ -225,7 +229,8 @@
                         <div class="col-sm-6 mb-3">
                             <div class="card h-100">
                                 <div class="card-body">
-                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Popular Posts</i></h6>
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Popular
+                                            Posts</i></h6>
                                     <small>Web Design</small>
                                     <div class="progress mb-3" style="height: 5px">
                                         <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"

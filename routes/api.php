@@ -28,9 +28,10 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
+Route::get('{page}', App\Http\Controllers\Admin\Post\IndexController::class)->where('page', '.*');
 
-Route::group(['namespace' => 'App\Http\Controllers\Admin\Post', 'middleware' => 'admin'], function () {
-    Route::get('/posts', IndexController::class);
+
+Route::group(['namespace' => '', 'middleware' => 'jwt.auth'], function () {
 //    Route::patch('/posts/{post}', UpdateController::class);
 //    Route::delete('/posts/{post}', DeleteController::class);
 //    Route::get('/posts/create', CreateController::class);

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('instagram')->nullable();
             $table->string('facebook')->nullable();
 
-            $table->foreign('user_id','up_userId_fk')->on('users')->references('id');
+            $table->foreign('user_id','up_userId_fk')->on('users')->references('id')->onDelete('cascade');
             $table->index('user_id', 'up_userId_idx');
             $table->timestamps();
         });

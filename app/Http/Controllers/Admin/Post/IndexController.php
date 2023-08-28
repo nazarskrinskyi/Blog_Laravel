@@ -31,7 +31,6 @@ class IndexController extends BaseController
         $posts = $postsQuery->paginate(10);
 
 
-
         if (isset($_GET['page'])) {
             if ($_GET['page'] < 1 || $_GET['page'] > $posts->lastPage()) {
                 $tag = isset($_GET['tags']) ? "&tags=$_GET[tags]" : '';

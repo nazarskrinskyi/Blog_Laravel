@@ -2,6 +2,7 @@
 
 @section('content')
     <div class="container">
+
         <div class="main-body">
             <!-- Breadcrumb -->
             <div style="position: relative">
@@ -10,6 +11,14 @@
                         <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">User Profile</li>
                         <li aria-current="page">
+                            @if(auth()->user()->id === $profile->user->id)
+                                <div class="nav-item" style="padding-right: 5px">
+                                    <form action="{{ route('logout') }}" method="post">
+                                        @csrf
+                                        <input class="btn btn-outline-warning" type="submit" value="Edit">
+                                    </form>
+                                </div>
+                            @endif
                             <button onclick="confirmDelete()" class="btn-outline-danger btn-sm" style="position: absolute; right: 10px; bottom: 7px">
                                 Delete Account
                             </button>
