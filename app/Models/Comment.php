@@ -15,11 +15,15 @@ class Comment extends Model
     use Filterable;
     protected $table = 'comments';
     protected $guarded = false;
-    protected $withCount = ['likedComments'];
+    protected $withCount = ['likedComments','likedReplies'];
 
     public function user(): BelongsTo
     {
         return $this->BelongsTo(User::class,'user_id', 'id');
+    }
+    public function profile(): BelongsTo
+    {
+        return $this->BelongsTo(UserProfile::class,'user_id', 'user_id');
     }
 
     public function getDateAsCarbonAttr(): Carbon
@@ -30,6 +34,10 @@ class Comment extends Model
     public function likedComments(): HasMany
     {
         return $this->hasMany(CommentLike::class, 'comment_id', 'id');
+    }
+    public function likedReplies(): HasMany
+    {
+        return $this->hasMany(CommentReplyLike::class, 'reply_id', 'id');
     }
 
     public function replies(): HasMany

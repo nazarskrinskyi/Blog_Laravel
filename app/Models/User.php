@@ -6,6 +6,7 @@ use App\Notifications\SendVerifyWithQueueNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Traits\Filterable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -73,6 +74,14 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     {
         return [];
     }
+    public function profile()
+    {
+        return $this->BelongsTo(UserProfile::class,'user_id', 'id',);
+    }
+    public function followers()
+    {
+        return $this->belongsToMany(UserProfile::class, 'followers','user_id','follower_id');
+    }
 
     public function likedPosts()
     {
@@ -81,6 +90,10 @@ class User extends Authenticatable implements JWTSubject,MustVerifyEmail
     public function likedComments()
     {
         return $this->belongsToMany(Comment::class, 'comment_likes','user_id','comment_id');
+    }
+    public function likedReplies()
+    {
+        return $this->belongsToMany(CommentReply::class, 'comment_reply_likes','user_id','reply_id');
     }
 
     public function commentedPosts()

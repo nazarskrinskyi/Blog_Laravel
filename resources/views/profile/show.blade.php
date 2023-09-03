@@ -1,59 +1,85 @@
 @extends('layouts.profile')
 
 @section('content')
+    <style>
+        .profile-image-container {
+            min-height: 150px; /* Adjust this value to your desired image height */
+            margin: auto;
+        }
+
+        .profile-image-container img {
+            min-height: 150px;
+            width: 100%;
+            height: auto;
+        }
+    </style>
+
     <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item text-right p-3">
+                    <button class="btn btn-outline-danger" onclick="goBack()">Go back</button>
+                </li>
+            </ul>
+        </nav>
+
+        <script>
+            function goBack() {
+                window.history.back();
+            }
+        </script>
 
         <div class="main-body">
-            <!-- Breadcrumb -->
-            <div style="position: relative">
-                <nav aria-label="breadcrumb" class="main-breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">User Profile</li>
-                        <li aria-current="page">
-                            @if(auth()->user()->id === $profile->user->id)
-                                <div class="nav-item" style="padding-right: 5px">
-                                    <form action="{{ route('logout') }}" method="post">
-                                        @csrf
-                                        <input class="btn btn-outline-warning" type="submit" value="Edit">
-                                    </form>
-                                </div>
-                            @endif
-                            <button onclick="confirmDelete()" class="btn-outline-danger btn-sm" style="position: absolute; right: 10px; bottom: 7px">
-                                Delete Account
-                            </button>
 
-                            <script>
-                                function confirmDelete() {
-                                    if (confirm("Are you sure you want to delete your account?")) {
-                                        console.log('delete')
-                                    }
-                                }
-                            </script>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-            <!-- /Breadcrumb -->
 
             <div class="row gutters-sm">
                 <div class="col-md-4 mb-3">
                     <div class="card">
                         <div class="card-body">
-
+                            <!-- Breadcrumb -->
+                            <div>
+                                <nav aria-label="breadcrumb" class="main-breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li aria-current="page">
+                                            <div class="nav-item " style="position: absolute;right: 10px">
+                                                <form action="{{ route('follow.store', $profile->id) }}" method="post">
+                                                    @csrf
+                                                    <button type="submit"
+                                                            class="btn btn-sm btn-outline-primary u-link-v5 g-color-gray-dark-v4 g-color-primary--hover">
+                                                        @if(auth()->user()->followers->contains($profile->id))
+                                                            <span>Un Follow</span>
+                                                        @else
+                                                            <span>Follow</span>
+                                                        @endif
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                </nav>
+                            </div>
+                            <!-- /Breadcrumb -->
                             <div class="d-flex flex-column align-items-center text-center">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin"
-                                     class="rounded-circle" width="150">
-                                <div class="mt-3">
-                                    {{ !is_null($profile->full_name) ? $profile->full_name : '' }}
-
-                                    <p class="text-secondary mb-1">Full Stack Developer</p>
-                                    <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                                    <button class="btn btn-primary">Follow</button>
-                                    <button class="btn btn-outline-primary">Message</button>
+                                <div class="profile-image-container">
+                                    @if(!$profile->image)
+                                        <img class="rounded-circle" @if($profile->description) style="min-height: 300px"
+                                             @endif
+                                             src="{{ asset('storage/images/user-avatar-filled.svg') }}" alt="set photo">
+                                    @else
+                                        <img class="rounded-circle" @if($profile->description) style="min-height: 300px"
+                                             @endif
+                                             src="{{ asset('storage/' . $profile->image) }}" alt="set photo">
+                                    @endif
+                                </div>
+                                <div class="mt-2">
+                                    <!-- Check if $profile is not null before accessing its properties -->
+                                    <p class="text-secondary mb-1">{{ $profile->description ?? 'Nan personal info' }}</p>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     <div class="card mt-3">
                         <ul class="list-group list-group-flush">
@@ -67,7 +93,7 @@
                                     </svg>
                                     Telegram
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->telegram) ? $profile->telegram : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->telegram ?? 'NaN' }}</span>
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -80,7 +106,8 @@
                                     </svg>
                                     Twitter
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->twitter) ? $profile->twitter : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->twitter ?? 'NaN' }}</span>
+
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -94,7 +121,8 @@
                                     </svg>
                                     Instagram
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->instagram) ? $profile->instagram : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->instagram ?? 'NaN' }}</span>
+
                             </li>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <h6 class="mb-0">
@@ -107,8 +135,9 @@
                                     </svg>
                                     Facebook
                                 </h6>
-                                <span class="text-secondary">{{ !is_null($profile->facebook) ? $profile->facebook : 'NaN' }}</span>
+                                <span class="text-secondary">{{ $profile->facebook ?? 'NaN' }}</span>
                             </li>
+
                         </ul>
                     </div>
                 </div>
@@ -120,7 +149,7 @@
                                     <h6 class="mb-0">Full Name</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ !is_null($profile->full_name) ? $profile->full_name : '' }}
+                                    <span class="text-secondary">{{ $profile->full_name ?? 'NaN' }}</span>
                                 </div>
                             </div>
                             <hr>
@@ -138,7 +167,8 @@
                                     <h6 class="mb-0">Phone</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ !is_null($profile->phone_number) ? $profile->phone_number : '' }}
+                                    <span class="text-secondary">{{ $profile->phone_number ?? 'NaN' }}</span>
+
                                 </div>
                             </div>
                             <hr>
@@ -147,7 +177,7 @@
                                     <h6 class="mb-0">Address</h6>
                                 </div>
                                 <div class="col-sm-9 text-secondary">
-                                    {{ !is_null($profile->address) ? $profile->address : '' }}
+                                    <span class="text-secondary">{{ $profile->address ?? 'NaN' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -157,50 +187,56 @@
                         <div class="col-sm-6 mb-3">
                             <div class="card">
                                 <div class="card-body">
-                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Followers</i></h6>
-                                    <small>Email</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
-                                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Nickname</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"
-                                             aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Followers</i>
+                                    </h6>
+
+                                    @if(isset($randomFollowers) && count($randomFollowers) > 0)
+                                        @foreach($randomFollowers as $follower)
+                                            <div class="d-flex mb-3">
+                                                @if($follower && $follower->image)
+                                                    <img class="d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5"
+                                                         style="width: 80px;height: 70px;margin-right: 15px"
+                                                         src="{{ asset("storage/" . $follower->image) }}"
+                                                         alt="Image Description">
+                                                @else
+                                                    <img class="d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5"
+                                                         style="width: 80px;height: 70px;margin-right: 15px"
+                                                         src="{{ asset("storage/images/user-avatar-filled.svg") }}"
+                                                         alt="Image Description">
+                                                @endif
+
+                                                @if($follower->user)
+                                                    <a href="{{ route('profile.show', $follower->user->name) }}" style="margin-top: 20px;">
+                                                        <span>{{ $follower->user->name }}</span>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        No One
+                                    @endif
 
                                 </div>
                             </div>
                         </div>
                         <div class="col-sm-6 mb-3">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-body">
-                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Popular Posts</i></h6>
-                                    <small>Web Design</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%"
-                                             aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Website Markup</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%"
-                                             aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>One Page</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%"
-                                             aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Mobile Template</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%"
-                                             aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Backend API</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%"
-                                             aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
+                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">Popular
+                                            Posts</i></h6>
+                                    @if(isset($randomPosts[0]))
+                                        @foreach($randomPosts as $post)
+                                            <div class="d-flex mb-3">
+                                                <img class=" d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5"
+                                                     style="width: 80px;height: 70px;margin-right: 15px"
+                                                     src="{{ asset("storage/" . $post->image) }}"
+                                                     alt="Image Description">
+                                                <a href="{{ route('post.show', $post->id) }}" style="margin-top: 20px;"><span>{{ $post->title }}</span></a>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        User has NaN
+                                    @endif
                                 </div>
                             </div>
                         </div>

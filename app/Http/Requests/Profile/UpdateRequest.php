@@ -11,7 +11,7 @@ class UpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,15 +22,15 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'full_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . auth()->id(),
-            'phone_number' => 'nullable|numeric',
+            'full_name' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:255',
-            'telegram' => 'nullable|string|max:255|regex:/^[a-zA-Z0-9_]+$/',
-            'twitter' => 'nullable|string|max:255|regex:/^@[a-zA-Z0-9_]+$/',
-            'instagram' => 'nullable|string|max:255|regex:/^[a-zA-Z0-9_]+$/',
-            'facebook' => 'nullable|string|max:255|regex:/^[a-zA-Z0-9_]+$/',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust the max file size as needed
+            'description' => 'nullable|string|max:255',
+            'telegram' => 'nullable|string',
+            'twitter' => 'nullable|string',
+            'instagram' => 'nullable|string',
+            'facebook' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Adjust the max file size as needed
         ];
     }
 }

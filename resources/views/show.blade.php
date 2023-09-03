@@ -125,15 +125,21 @@
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <div class="media g-mb-30 media-comment">
-                            <a href="{{ route('profile.show', $comment->user_id) }}">
-                                <img class="d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5" width="100"
+                            <a href="{{ route('profile.show', $comment->profile->id) }}">
+                                @if($comment->profile->image)
+                                <img class=" d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5 p-2" width="100"
                                      height="100"
-                                     src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Image Description">
+                                     src="{{ asset("storage/" . $comment->profile->image) }}" alt="Image Description">
+                                @else
+                                    <img class="d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5 p-1" width="100"
+                                         height="100"
+                                         src="{{ asset("storage/images/user-avatar-filled.svg") }}" alt="Image Description">
+                                @endif
                             </a>
                             <div class="media-body u-shadow-v18 g-bg-secondary g-pa-30">
                                 <div class="g-mb-15">
-                                    <a href="{{ route('profile.show', $comment->user_id) }}" style="color: #1b1e21">
-                                        <h5 class="h5 g-color-gray-dark-v1 mb-0">{{ \App\Models\User::find($comment->user_id)->name }}</h5>
+                                    <a href="{{ route('profile.show', $comment->profile->id) }}" style="color: #1b1e21">
+                                        <h5 class="h5 g-color-gray-dark-v1 mb-0">{{ $comment->user->name }}</h5>
                                     </a>
                                     <span
                                         class="text-primary g-color-gray-dark-v4 g-font-size-12">{{ $comment->getDateAsCarbonAttr()->format('Y-m-d H:i:s') }}</span>
@@ -216,18 +222,21 @@
                     <div class="row mb-3 show-reply-form" data-comment="{{ $comment->id }}">
                         <div class="col-md-9">
                             <div class="media g-mb-30 media-comment">
-                                <a href="{{ route('profile.show', $comment->user_id) }}" style="color: #1b1e21">
-                                    <img
-                                        class="d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5"
-                                        width="60"
-                                        height="60"
-                                        src="https://bootdey.com/img/Content/avatar/avatar7.png"
-                                        alt="Image Description">
+                                <a href="{{ route('profile.show', $reply->profile->id) }}" style="color: #1b1e21">
+                                    @if($reply->profile->image)
+                                        <img class=" d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5 p-3" width="100"
+                                             height="100"
+                                             src="{{ asset("storage/" . $reply->profile->image) }}" alt="Image Description">
+                                    @else
+                                        <img class="d-flex g-width-5 g-height-5 rounded-circle g-mt-1 g-mr-5 p-1" width="100"
+                                             height="100"
+                                             src="{{ asset("storage/images/user-avatar-filled.svg") }}" alt="Image Description">
+                                    @endif
                                 </a>
                                 <div class="media-body u-shadow-v16 g-bg-secondary g-pa-20">
                                     <div class="g-mb-15">
-                                        <a href="{{ route('profile.show', $comment->user_id) }}" style="color: #1b1e21">
-                                            <h6 class="h6 g-color-gray-dark-v1 mb-0">{{ \App\Models\User::find($reply->user_id)->name }}</h6>
+                                        <a href="{{ route('profile.show', $reply->profile->id) }}" style="color: #1b1e21">
+                                            <h6 class="h6 g-color-gray-dark-v1 mb-0">{{ $reply->user->name }}</h6>
                                         </a>
                                         <span
                                             class="text-primary g-color-gray-dark-v3 g-font-size-11"
@@ -238,14 +247,14 @@
                                         <li class="list-inline-item g-mr-10"
                                             style="margin-top: -15px">
                                             <form
-                                                action="{{ route('post.like.comment.store', $reply->id) }}"
+                                                action="{{ route('post.like.comment.reply.store', $reply->id) }}"
                                                 method="post">
                                                 @csrf
                                                 <button type="submit" style="font-size: 14px;padding: 3px 7px 3px 7px"
                                                         class=" btn btn-outline-primary u-link-v5 g-color-gray-dark-v4 g-color-primary--hover"
                                                 >
                                                     @if(auth()->user() !== null)
-                                                        @if(auth()->user()->likedComments->contains($reply->id))
+                                                        @if(auth()->user()->likedReplies->contains($reply->id))
                                                             <i class="fa fa-thumbs-up g-pos-rel g-top-1 g-mr-3"></i>
                                                         @else
                                                             <i class="far fa-thumbs-up g-pos-rel g-top-1 g-mr-3"></i>
@@ -253,7 +262,7 @@
                                                     @else
                                                         <i class="far fa-thumbs-up g-pos-rel g-top-1 g-mr-3"></i>
                                                     @endif
-                                                    <span>{{ $reply->liked_comments_count }}</span>
+                                                    <span>{{ $reply->liked_replies_count }}</span>
                                                 </button>
                                             </form>
                                         </li>

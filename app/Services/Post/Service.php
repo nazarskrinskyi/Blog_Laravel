@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\PostTag;
 use App\Models\Tag;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class Service
 {
@@ -14,6 +15,7 @@ class Service
     {
         try {
             DB::beginTransaction();
+            if (isset($data['image'])) $data['image'] = Storage::disk('public')->put('/images',$data['image']);
 
             if (isset($data['tags'])) {
                 $tags = $data['tags'];
@@ -37,6 +39,8 @@ class Service
     {
         try {
             DB::beginTransaction();
+
+            if (isset($data['image'])) $data['image'] = Storage::disk('public')->put('/images',$data['image']);
 
             if (isset($data['tags'])) {
                 $tags = $data['tags'];

@@ -4,8 +4,13 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\Policies\AdminPolicy;
+use App\Policies\ProfilePolicy;
+use App\Policies\ProfileRedirect;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\RedirectResponse;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -15,7 +20,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        User::class => AdminPolicy::class
+        User::class => AdminPolicy::class,
+        UserProfile::class => ProfilePolicy::class
     ];
 
     /**
@@ -23,6 +29,5 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="background: white">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -36,6 +36,63 @@
 
 
 </head>
+<header class="edica-header"  style="background: white">
+    <div class="container" >
+        <nav class="navbar navbar-expand-lg navbar-light"  style="background: white">
+            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('assets/images/logo.svg') }}"
+                                                                    alt="Edica"></a>
+            <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
+                    data-target="#edicaMainNav"
+                    aria-controls="collapsibleNavId" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="edicaMainNav">
+                <ul class="navbar-nav mx-auto mt-2 mt-lg-0">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('home') }}">Home<span
+                                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        @if(!isset($auth))
+                            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">Authentication</a>
+                            <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                <a class="dropdown-item" href="{{ route('login') }}">Login</a>
+                                <a class="dropdown-item" href="{{ route('register') }}">Register</a>
+                            </div>
+                        @else
+                            <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">{{ $auth->name }}</a>
+                            <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                                @if($auth->role === 'admin')
+                                    <a class="dropdown-item" href="{{ route('admin.index') }}">Admin</a>
+                                @endif
+                                @if($auth->role === 'admin')
+                                    <a class="dropdown-item" href="{{ route('personal.index') }}">Personal Admin</a>
+                                @endif
+                                @auth()
+                                    <a class="dropdown-item" href="{{ route('profile.index') }}">Profile</a>
+                                @endauth
+                                <form method="post" action="{{ route('logout') }}">
+                                    @csrf
+                                    <input class="dropdown-item" type="submit" value="Logout">
+                                </form>
+                            </div>
+                        @endif
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="blogDropdown" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">Blog</a>
+                        <div class="dropdown-menu" aria-labelledby="blogDropdown">
+                            <a class="dropdown-item" href="{{ route('contact.index') }}">Contacts</a>
+                            <a class="dropdown-item" href="{{ route('about.index') }}">About</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</header>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
@@ -45,31 +102,7 @@
              width="60">
     </div>
 
-    <!-- Navbar -->
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light d-flex justify-content-between">
-        <!-- Left navbar links -->
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
 
-        </ul>
-        <ul class="navbar-nav">
-
-            <li class="nav-item">
-                <form action="{{ route('logout') }}" method="post">
-                    @csrf
-                    <input class="btn btn-outline-danger" type="submit" value="Logout">
-                </form>
-            </li>
-        </ul>
-
-    </nav>
-
-
-
-
-    @include('includes.personal.sidebar')
 
     <!-- Content Section -->
     <section class="content" style="background: white">

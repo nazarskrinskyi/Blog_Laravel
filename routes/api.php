@@ -28,7 +28,7 @@ Route::group([
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
 });
-Route::get('{page}', App\Http\Controllers\Admin\Post\IndexController::class)->where('page', '.*');
+//Route::get('{page}', App\Http\Controllers\Admin\Post\IndexController::class)->where('page', '.*');
 
 
 Route::group(['namespace' => '', 'middleware' => 'jwt.auth'], function () {

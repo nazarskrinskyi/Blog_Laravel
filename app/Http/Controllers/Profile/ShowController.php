@@ -4,19 +4,28 @@ namespace App\Http\Controllers\Profile;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\Post;
 use App\Models\UserProfile;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
-class ShowController extends Controller
+class ShowController extends BaseController
 {
-    public function __invoke(UserProfile $profile): View
+    public function __invoke(UserProfile $profile): \Illuminate\Http\RedirectResponse|View
     {
-        //if (isset($data['image'])) $data['image'] = Storage::disk('public')->put('/images',$data['image']);
+        if (auth()->user()->id === $profile->user_id) {
+            return redirect()->route('profile.index');
+        }
 
-        return view('profile.show', compact('profile'));
+        $auth = Auth::user();
+
+        $posts = Post::where('user_id', '=', $profile->user_id)->get();
+
+        $randomPosts = $this->service->randomFresh($posts);
+
+        $randomFollowers = $this->service->randomFollowers($profile);
+        return view('profile.show', compact('profile', 'auth', 'randomPosts', 'randomFollowers'));
     }
-
 
 
 }

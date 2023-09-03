@@ -24,15 +24,21 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::get('/', IndexController::class)->name('home');
 
 });
-Route::group(['namespace' => 'App\Http\Controllers\Profile', 'middleware' => 'auth', 'prefix' => 'profile' ], function () {
+
+Route::group(['namespace' => 'App\Http\Controllers\Profile', 'middleware' => 'auth', 'prefix' => 'profile'], function () {
     Route::get('/', IndexController::class)->name('profile.index');
     Route::get('/{profile}', ShowController::class)->name('profile.show');
+    Route::patch('/{profile}', UpdateController::class)->name('profile.update');
+    Route::delete('/{profile}', DeleteController::class)->name('profile.delete');
+    Route::get('/{profile}/edit', EditController::class)->name('profile.edit');
 });
 
-//Route::group(['namespace' => 'App\Http\Controllers\Practise', 'prefix' => 'practise' ], function () {
-//    Route::get('/', IndexController::class)->name('practise');
-//    Route::get('/{page}', IndexController::class)->name('practise.index');
-//});
+Route::group(['namespace' => 'App\Http\Controllers', 'middleware' => 'auth'], function () {
+
+    Route::group(['namespace' => 'Follow', 'prefix' => '{profile}/followers'], function () {
+        Route::post('/', StoreController::class)->name('follow.store');
+    });
+});
 
 
 Route::group(['namespace' => 'App\Http\Controllers\Post', 'prefix' => 'posts'], function () {
